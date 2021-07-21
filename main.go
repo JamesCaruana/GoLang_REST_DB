@@ -7,6 +7,7 @@ import (
 	"go_rad/models"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
@@ -16,23 +17,25 @@ var collection = db.ConnectDb()
 
 func main() {
 	// Subrouter
-	r := mux.NewRouter()
+	router := mux.NewRouter()
 
 	// Create the handles for each
-	r.HandleFunc("/api/users", getUsers).Methods(http.MethodGet)
-	//r.HandleFunc("/api/users/{id}", getUserById).Methods(http.MethodGet)
-	//r.HandleFunc("/api/user", createUser).Methods(http.MethodPut)
-	//r.HandleFunc("/api/users/{id}", updateUser).Methods(http.MethodPut)
-	//r.HandleFunc("/api/users/{id}", deleteUser).Methods(http.MethodDelete)
-	log.Fatal(http.ListenAndServe("localhost:27017", r))
+	router.HandleFunc("/api/users", getUsers).Methods(http.MethodGet)
+	//router.HandleFunc("/api/users/{id}", getUserById).Methods(http.MethodGet)
+	router.HandleFunc("/api/user", createUser).Methods(http.MethodPost)
+	//router.HandleFunc("/api/users/{id}", updateUser).Methods(http.MethodPut)
+	//router.HandleFunc("/api/users/{id}", deleteUser).Methods(http.MethodDelete)
+	log.Fatal(http.ListenAndServe("localhost:800", router))
 }
 
+// GET all users from database
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Array of struct users
 	var users []models.User
 
+	// Gets all user from database
 	cur, err := collection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		db.GetError(err, w)
@@ -57,7 +60,28 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 //func getUserById()
 
-//func createUser()
+// POST new user to database
+func createUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var user models.User
+
+	// Decodes json body to User struct
+	_ = json.NewDecoder(r.Body).Decode(&user)
+
+	// Set the structure fields
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+
+	// Inserts decoded data to database
+	res, err := collection.InsertOne(context.TODO(), user)
+
+	if err != nil {
+		db.GetError(err, w)
+	}
+	json.NewEncoder(w).Encode(res)
+
+}
 
 //func updateUser()
 

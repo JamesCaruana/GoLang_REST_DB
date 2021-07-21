@@ -9,6 +9,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 // ErrorResponse : This is error model.
@@ -19,13 +20,19 @@ type ErrorResponse struct {
 
 func ConnectDb() *mongo.Collection {
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:28017")
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = client.Ping(context.Background(), readpref.Primary())
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	fmt.Println("Connected to MongoDB!")
 
 	collection := client.Database("go_rest_api").Collection("users")
