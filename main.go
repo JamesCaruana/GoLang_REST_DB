@@ -11,6 +11,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var collection = db.ConnectDb()
@@ -21,7 +22,7 @@ func main() {
 
 	// Create the handles for each
 	router.HandleFunc("/api/users", getUsers).Methods(http.MethodGet)
-	//router.HandleFunc("/api/users/{id}", getUserById).Methods(http.MethodGet)
+	router.HandleFunc("/api/users/{id}", getUserById).Methods(http.MethodGet)
 	router.HandleFunc("/api/user", createUser).Methods(http.MethodPost)
 	//router.HandleFunc("/api/users/{id}", updateUser).Methods(http.MethodPut)
 	//router.HandleFunc("/api/users/{id}", deleteUser).Methods(http.MethodDelete)
@@ -58,7 +59,26 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
-//func getUserById()
+// GET user by id
+func getUserById(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var user models.User
+
+	var params = mux.Vars(r)
+
+	id, _ := primitive.ObjectIDFromHex(params["id"])
+	filter := bson.M{"_id": id}
+
+	err := collection.FindOne(context.TODO(), filter).Decode(&user)
+	if err != nil {
+		db.GetError(err, w)
+		return
+	}
+
+	json.NewEncoder(w).Encode(user)
+
+}
 
 // POST new user to database
 func createUser(w http.ResponseWriter, r *http.Request) {
