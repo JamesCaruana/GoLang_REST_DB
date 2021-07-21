@@ -25,7 +25,7 @@ func main() {
 	router.HandleFunc("/api/users/{id}", getUserById).Methods(http.MethodGet)
 	router.HandleFunc("/api/user", createUser).Methods(http.MethodPost)
 	router.HandleFunc("/api/users/{id}", updateUser).Methods(http.MethodPut)
-	//router.HandleFunc("/api/users/{id}", deleteUser).Methods(http.MethodDelete)
+	router.HandleFunc("/api/users/{id}", deleteUser).Methods(http.MethodDelete)
 	log.Fatal(http.ListenAndServe("localhost:800", router))
 }
 
@@ -136,4 +136,23 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-//func deleteUser()
+// DELETE user by id from database
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var params = mux.Vars(r)
+
+	id, err := primitive.ObjectIDFromHex(params["id"])
+
+	// Filters by id
+	filter := bson.M{"_id": id}
+
+	deleteRes, err := collection.DeleteOne(context.TODO(), filter)
+
+	if err != nil {
+		db.GetError(err, w)
+		return
+	}
+
+	json.NewEncoder(w).Encode(deleteRes)
+}

@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "d51f6280-0e86-4681-933e-7d86cd2d2f56",
+		"name": "Go_Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:800/api/users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:800/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "800",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:800/api/user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Bruno Fernandes\",\r\n    \"dob\":\"04/09/1994\",\r\n    \"address\":\"Maia, Portugal\",\r\n    \"description\":\"Midfielder for Manchester United\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:800/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "800",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:800/api/user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Marcus Rashford\",\r\n    \"dob\":\"31/10/1997\",\r\n    \"address\":\"Manchester, United Kingdom\",\r\n    \"description\":\"Forward Striker for Mancherster United\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:800/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "800",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:800/api/users/60f83c3b84d9b51d2280a497",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:800/api/users/60f83c3b84d9b51d2280a497",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "800",
+					"path": [
+						"api",
+						"users",
+						"60f83c3b84d9b51d2280a497"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:800/api/users/60f83c3b84d9b51d2280a497",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"James\",\r\n    \"dob\":\"22/06/1996\",\r\n    \"address\":\"Nottingham\",\r\n    \"description\":\"British\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:800/api/users/60f83c3b84d9b51d2280a497",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "800",
+					"path": [
+						"api",
+						"users",
+						"60f83c3b84d9b51d2280a497"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:800/api/users/60f83c3b84d9b51d2280a497",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:800/api/users/60f83c3b84d9b51d2280a497",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "800",
+					"path": [
+						"api",
+						"users",
+						"60f83c3b84d9b51d2280a497"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
