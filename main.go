@@ -143,6 +143,9 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 	var params = mux.Vars(r)
 
 	id, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Filters by id
 	filter := bson.M{"_id": id}
