@@ -24,7 +24,7 @@ func main() {
 	router.HandleFunc("/api/users", getUsers).Methods(http.MethodGet)
 	router.HandleFunc("/api/users/{id}", getUserById).Methods(http.MethodGet)
 	router.HandleFunc("/api/user", createUser).Methods(http.MethodPost)
-	//router.HandleFunc("/api/users/{id}", updateUser).Methods(http.MethodPut)
+	router.HandleFunc("/api/users/{id}", updateUser).Methods(http.MethodPut)
 	//router.HandleFunc("/api/users/{id}", deleteUser).Methods(http.MethodDelete)
 	log.Fatal(http.ListenAndServe("localhost:800", router))
 }
@@ -64,10 +64,10 @@ func getUserById(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var user models.User
-
 	var params = mux.Vars(r)
 
 	id, _ := primitive.ObjectIDFromHex(params["id"])
+	// Filters by id
 	filter := bson.M{"_id": id}
 
 	err := collection.FindOne(context.TODO(), filter).Decode(&user)
@@ -95,7 +95,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	// Inserts decoded data to database
 	res, err := collection.InsertOne(context.TODO(), user)
-
 	if err != nil {
 		db.GetError(err, w)
 	}
@@ -103,6 +102,38 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//func updateUser()
+// PUT updates user by ID
+func updateUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var params = mux.Vars(r)
+	var user models.User
+
+	id, _ := primitive.ObjectIDFromHex(params["id"])
+
+	// Filters by id
+	filter := bson.M{"_id": id}
+	_ = json.NewDecoder(r.Body).Decode(&user)
+
+	// Setting up structure
+	update := bson.D{
+		{"$set", bson.D{
+			{"name", user.Name},
+			{"dob", user.DOB},
+			{"address", user.Address},
+			{"description", user.Description},
+			{"ca", user.CreatedAt},
+			{"ua", time.Now()},
+		}},
+	}
+
+	err := collection.FindOneAndUpdate(context.Background(), filter, update).Decode(&user)
+	if err != nil {
+		db.GetError(err, w)
+	}
+
+	user.ID = id
+	json.NewEncoder(w).Encode(user)
+}
 
 //func deleteUser()
